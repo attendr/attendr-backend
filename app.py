@@ -207,8 +207,35 @@ class SendQRCode(Resource):
                 'error': 'QR Code expired'
             }
 
+
+class MakeQRCode(Resource):
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('course_id', type=str, required=True, help='Parmeter course_id is required')
+        self.parser.add_argument('class_id', type=str, required=True, help='Parmeter class_id is required')
+        super()
+
+    def get(self):
+        args = self.parser.parse_args(strict=True)
+        try:
+            data = {'course_id': args.get('course_id'), 'class_id': args.get('class_id')}
+            data = timed_serializer.dumps(data)
+            return {
+                    'sucess': True,
+                    'image_url': f'https://api.qrserver.com/v1/create-qr-code/?data={data}&size=600x600'
+            }, 200
+        except:
+            return {
+                'success': False,
+                'error': 'QR Code could not be generated'
+            }, 500
+
+
 api.add_resource(Login, '/login')
 api.add_resource(SendQRCode, '/mark')
+api.add_resource(MakeQRCode, '/getqr')
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.debug = False
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port, threaded=True)
