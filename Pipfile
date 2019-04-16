@@ -12,6 +12,7 @@ flask-admin = "*"
 flask-sqlalchemy = "*"
 flask-restful = "*"
 flask-wtf = "*"
+psycopg2-binary = "*"
 
 [requires]
 python_version = "3.6"
