@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 
-from flask import Flask, redirect, render_template, session, url_for
+from flask import Flask, redirect, render_template, session, url_for, request, abort
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_restful import Api, Resource, reqparse
@@ -110,8 +110,9 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[InputRequired('Password is a required field')])
 
 
-@app.route('/login', methods=['GET'])
-def login_role(role):
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
+def login_role():
     form = LoginForm()
     if form.validate_on_submit():
         username, password = form.username.data, form.password.data
@@ -131,6 +132,39 @@ def login_role(role):
 def logout():
     session.clear()
     return redirect(url_for('login'))
+
+
+@app.route('/teacher', methods=['GET'])
+def teacher_dashboard():
+    username = session.get('username')
+    teacher = Teacher.query.filter_by(username=username).first()
+    courses = teacher.courses_taught
+    return render_template('teacher_dashboard.html', courses=courses)
+
+
+@app.route('/teacher/course/<course_name>', methods=['GET', 'POST'])
+def get_course(course_name):
+    username = session.get('username')
+    teacher = Teacher.query.filter_by(username=username).first()
+    course = Course.query.filter_by(teacher=teacher).filter_by(course_name=course_name).first()
+    if course:
+        classes = course.classes
+        return render_template('course_timings.html', course=course, classes=classes)
+    else:
+        return abort(403)
+
+
+@app.route('/teacher/course/<course_name>/<class_date>', methods=['GET', 'POST'])
+def get_class(course_name, class_date):
+    username = session.get('username')
+    teacher = Teacher.query.filter_by(username=username).first()
+    course = Course.query.filter_by(teacher=teacher).filter_by(course_name=course_name).first()
+    if course:
+        the_class = Class.query.filter_by(course=course).filter_by(date=class_date).first()
+        attendance = the_class.attendance
+        return render_template('class.html', course=course, the_class=the_class, attendances=attendance)
+    else:
+        return abort(403)
 
 
 class Login(Resource):
