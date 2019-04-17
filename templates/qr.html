@@ -23,7 +23,7 @@
 </div>
 <div class="splash-container">
     <div class="splash">
-        <img id="qr" src="/getqr?class_id={{ the_class_id }}&course_id={{ course_id }}">
+        <img id="qr" src="" onload="loadImage()">
     </div>
 </div>
 
@@ -35,13 +35,26 @@
 
 </div>
 <script>
+        function loadImage() {
+          fetch('/getqr?class_id={{ the_class_id }}&course_id={{ course_id }}')
+          .then(response => {
+            return response.json()
+          })
+          .then(data => {
+            var image = document.getElementsById("qr");
+            image.src = data['image_url'];
+          })
+          .catch(err => {
+            console.log(err);
+          })
+        }
         window.setInterval(function(){
           fetch('/getqr?class_id={{ the_class_id }}&course_id={{ course_id }}')
           .then(response => {
             return response.json()
           })
           .then(data => {
-            var image = document.getElementsByClassName("qr");
+            var image = document.getElementsById("qr");
             image.src = data['image_url'];
           })
           .catch(err => {
