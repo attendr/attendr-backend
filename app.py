@@ -10,6 +10,7 @@ from flask_wtf import FlaskForm
 from itsdangerous import URLSafeTimedSerializer, URLSafeSerializer
 from wtforms import PasswordField, StringField
 from wtforms.validators import InputRequired, Length
+from datetime import datetime
 
 
 app = Flask(__name__)
@@ -43,7 +44,7 @@ class LoginLogs(db.Model):
 
     @staticmethod
     def issue_token(user_id):
-        return serializer.dumps(user_id)
+        return serializer.dumps({'user_id': user_id, 'timestamp': datetime.now())
 
 
 class User(object):
@@ -184,7 +185,7 @@ class Login(Resource):
         if login_log.token_issued:
             courses = []
             for course in student.courses_taken:
-                attendance_list = [attendance.attended for attendance in course_class.attendance for course_class in course.classes]
+                attendance_list = [attendance.attended for course_class in course.classes for attendance in course_class.attendance]
                 attendance_percentage = 100 * attendance_list.count(True) / len(attendance_list)
                 attendance_percentage = int("{0:.2f}".format(attendance_percentage))
                 courses.append({'course_name': course.course_name, 'course_attendance': attendance_percentage})
@@ -220,7 +221,7 @@ class SendQRCode(Resource):
         student_data = args.get('student_token')
         try:
             data = timed_serializer.loads(data, max_age=10)  # 10 seconds to allow for double way network latency
-            student_id = serializer.loads(student_data)
+            student_id = serializer.loads(student_data)['user_id']
             existing_attendance = Attendance.query.filter_by(course_id=data['course_id']).filter_by(class_id=data['class_id']).filter_by(student_id=student_id).first()
             if existing_attendance:
                 return {
