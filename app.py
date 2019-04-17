@@ -198,7 +198,7 @@ class Login(Resource):
                 'user': {
                     'username': username,
                     'no_of_courses': len(student.courses_taken),
-                    'average_attendance': int("{0:.2f}".format(sum([course.attendance_percentage for course in courses]) / len(courses)))
+                    'average_attendance': int(float("{0:.2f}".format(sum([course['course_attendance'] for course in courses]) / len(courses))))
                 },
                 'courses': courses
             }
