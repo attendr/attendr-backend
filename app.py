@@ -231,6 +231,7 @@ class SendQRCode(Resource):
             data = timed_serializer.loads(data, max_age=10)  # 10 seconds to allow for double way network latency
             print(data)
             student_id = serializer.loads(student_data)['user_id']
+            print(student_id)
             existing_attendance = Attendance.query.filter_by(course_id=data['course_id']).filter_by(class_id=data['class_id']).filter_by(student_id=student_id).first()
             print(existing_attendance)
             if existing_attendance:
@@ -239,7 +240,7 @@ class SendQRCode(Resource):
                     'message': 'Already marked'
                 }, 202
             else:
-                attendance = Attendance(data['course_id'], data['class_id'], student_id, True)
+                attendance = Attendance(int(data['course_id']), int(data['class_id']), int(student_id), True)
                 db.session.add(attendance)
                 db.session.commit()
                 return {
