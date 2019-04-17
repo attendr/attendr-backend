@@ -247,11 +247,12 @@ class SendQRCode(Resource):
                     'success': "true",
                     'message': 'Attendance marked!'
                 }, 200
-        except:
+        except Exception as e:
+            print(e)
             return {
                 'success': "false",
                 'error': 'QR Code expired'
-            }, 403
+            }, 404
 
 
 class MakeQRCode(Resource):
