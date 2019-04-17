@@ -41,7 +41,7 @@
             return response.json()
           })
           .then(data => {
-            var image = document.getElementsById("qr");
+            var image = document.getElementById("qr");
             image.src = data['image_url'];
           })
           .catch(err => {
@@ -54,7 +54,7 @@
             return response.json()
           })
           .then(data => {
-            var image = document.getElementsById("qr");
+            var image = document.getElementById("qr");
             image.src = data['image_url'];
           })
           .catch(err => {
