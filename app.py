@@ -190,7 +190,7 @@ class Login(Resource):
                     attendance_percentage = 0
                 else:
                     attendance_percentage = 100 * attendance_list.count(True) / len(attendance_list)
-                attendance_percentage = int("{0:.2f}".format(attendance_percentage))
+                attendance_percentage = int(float("{0:.2f}".format(attendance_percentage)))
                 courses.append({'course_name': course.course_name, 'course_attendance': attendance_percentage})
             result = {
                 'sucess': True,
