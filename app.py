@@ -247,7 +247,7 @@ class SendQRCode(Resource):
                     'message': 'Attendance marked!'
                 }, 200
         except:
-            result = {
+            return {
                 'success': "false",
                 'error': 'QR Code expired'
             }, 403
