@@ -228,7 +228,7 @@ class SendQRCode(Resource):
         data = args.get('data')
         student_data = args.get('student_token')
         try:
-            data = timed_serializer.loads(data, max_age=10)  # 10 seconds to allow for double way network latency
+            data = timed_serializer.loads(data, max_age=15)  # 15 seconds to allow for double way network latency
             print(data)
             student_id = serializer.loads(student_data)['user_id']
             print(student_id)
