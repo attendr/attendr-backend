@@ -209,7 +209,7 @@ class Login(Resource):
                 'auth_token': login_log.token_issued,
                 'username': username,
                 'no_of_courses': len(student.courses_taken),
-                'average_attendance': int(float("{0:.2f}".format(sum([course['course_attendance'] for course in courses]) / sum([len(course.classes) for course in courses])))),
+                'average_attendance': int(float("{0:.2f}".format(sum([course['course_attendance'] for course in courses]) / sum(len(courses))),
                 'courses': courses
             }
             return result, 200
