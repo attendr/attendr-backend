@@ -44,7 +44,7 @@ class LoginLogs(db.Model):
 
     @staticmethod
     def issue_token(user_id):
-        return serializer.dumps({'user_id': user_id, 'timestamp': datetime.now()})
+        return serializer.dumps({'user_id': user_id, 'timestamp': str(datetime.now())})
 
 
 class User(object):
