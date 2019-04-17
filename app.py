@@ -94,7 +94,7 @@ class Attendance(db.Model):
     student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
     attended = db.Column(db.Boolean, default=False)
 
-    def __init_(self, course_id, class_id, student_id, attended):
+    def __init__(self, course_id, class_id, student_id, attended):
         self.course_id = course_id
         self.class_id = class_id
         self.student_id = student_id
@@ -236,7 +236,6 @@ class SendQRCode(Resource):
         try:
             data = timed_serializer.loads(data, max_age=15)  # 15 seconds to allow for double way network latency
             student_id = serializer.loads(student_data)['user_id']
-            print(data['course_id'])
             existing_attendance = Attendance.query.filter_by(course_id=data['course_id']).filter_by(class_id=data['class_id']).filter_by(student_id=student_id).first()
             print(existing_attendance)
             if existing_attendance:
