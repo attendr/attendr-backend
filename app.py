@@ -203,14 +203,13 @@ class Login(Resource):
                     attendance_percentage = 0
                 else:
                     attendance_percentage = 100 * attendance_list.count(True) / len(attendance_list)
-                attendance_percentage = int(float("{0:.2f}".format(attendance_percentage)))
-                courses.append({'course_name': course.course_name, 'course_attendance': attendance_percentage})
+                courses.append({'course_name': course.course_name, 'course_attendance': int(float("{0:.2f}".format(attendance_percentage)))})
             result = {
                 'success': "true",
                 'auth_token': login_log.token_issued,
                 'username': username,
                 'no_of_courses': len(student.courses_taken),
-                'average_attendance': int(float("{0:.2f}".format(sum([course['course_attendance'] for course in courses]) / len(courses)))),
+                'average_attendance': int(float("{0:.2f}".format(sum([course['course_attendance'] for course in courses]) / sum([len(course.classes) for course in courses])))),
                 'courses': courses
             }
             return result, 200
