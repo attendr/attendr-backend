@@ -200,7 +200,7 @@ class Login(Resource):
                 attendance_percentage = int(float("{0:.2f}".format(attendance_percentage)))
                 courses.append({'course_name': course.course_name, 'course_attendance': attendance_percentage})
             result = {
-                'sucess': True,
+                'success': "true",
                 'auth_token': login_log.token_issued,
                 'user': {
                     'username': username,
@@ -235,7 +235,7 @@ class SendQRCode(Resource):
             existing_attendance = Attendance.query.filter_by(course_id=data['course_id']).filter_by(class_id=data['class_id']).filter_by(student_id=student_id).first()
             if existing_attendance:
                 return {
-                    'sucess': True,
+                    'success': "true",
                     'message': 'Already marked'
                 }, 202
             else:
@@ -243,7 +243,7 @@ class SendQRCode(Resource):
                 db.session.add(attendance)
                 db.session.commit()
                 return {
-                    'sucess': True,
+                    'success': "true",
                     'message': 'Attendance marked!'
                 }, 200
         except:
@@ -266,7 +266,7 @@ class MakeQRCode(Resource):
             data = {'course_id': args.get('course_id'), 'class_id': args.get('class_id')}
             data = timed_serializer.dumps(data)
             return {
-                    'sucess': True,
+                    'success': "true",
                     'image_url': f'https://api.qrserver.com/v1/create-qr-code/?data={data}&size=600x600'
             }, 200
         except:
