@@ -184,7 +184,7 @@ class Login(Resource):
         if login_log.token_issued:
             courses = []
             for course in student.courses_taken:
-                attendance_list = [for attendance.attended in course_class.attendance for course_class in course.classes]
+                attendance_list = [attendance.attended for attendance in course_class.attendance for course_class in course.classes]
                 attendance_percentage = 100 * attendance_list.count(True) / len(attendance_list)
                 attendance_percentage = int("{0:.2f}".format(attendance_percentage))
                 courses.append({'course_name': course.course_name, 'course_attendance': attendance_percentage})
