@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 
-from flask import Flask, redirect, render_template, session, url_for, request, abort
+from flask import Flask, redirect, render_template, session, url_for, request, abort, send_from_directory
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_restful import Api, Resource, reqparse
@@ -156,16 +156,23 @@ def get_course(course_name):
 
 
 @app.route('/teacher/course/<course_name>/<class_id>', methods=['GET', 'POST'])
-def get_class(course_name, class_date):
+def get_class(course_name, class_id):
     username = session.get('username')
     teacher = Teacher.query.filter_by(username=username).first()
-    course = Course.query.filter_by(teacher=teacher).filter_by(course_name=course_name).first()
-    if course:
-        the_class = Class.query.filter_by(course=course).filter_by(date=class_date).first()
-        attendance = the_class.attendance
-        return render_template('class.html', course=course, the_class=the_class, attendances=attendance)
+    if teacher:
+        course = Course.query.filter_by(teacher=teacher).filter_by(course_name=course_name).first()
+        if course:
+            the_class = Class.query.filter_by(course=course).filter_by(id=class_id).first()
+            return render_template('qr.html', course_id=course.id, the_class_id=the_class.id)
+        else:
+            return abort(403)
     else:
         return abort(403)
+
+
+@app.route('/css/<path:path>')
+def send_file(path):
+    return send_from_directory('css', path)
 
 
 class Login(Resource):
