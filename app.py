@@ -94,6 +94,12 @@ class Attendance(db.Model):
     student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
     attended = db.Column(db.Boolean, default=False)
 
+    def __init_(self, course_id, class_id, student_id, attended):
+        self.course_id = course_id
+        self.class_id = class_id
+        self.student_id = student_id
+        self.attended = attended
+
 
 db.create_all()
 
