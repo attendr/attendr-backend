@@ -212,7 +212,7 @@ class Login(Resource):
             return result, 200
         else:
             result = {
-                'success': False,
+                'success': "false",
                 'message': 'username/password mismatch'
             }
             return result, 401
@@ -248,7 +248,7 @@ class SendQRCode(Resource):
                 }, 200
         except:
             result = {
-                'success': False,
+                'success': "false",
                 'error': 'QR Code expired'
             }
 
@@ -271,7 +271,7 @@ class MakeQRCode(Resource):
             }, 200
         except:
             return {
-                'success': False,
+                'success': "false",
                 'error': 'QR Code could not be generated'
             }, 500
 
