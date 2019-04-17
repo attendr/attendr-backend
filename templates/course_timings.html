@@ -29,7 +29,7 @@
               <ul class="collection with-header">
                 <li class="collection-header"><h2>{{ course.course_name }}</h2></li>
                 {% for class in classes %}
-                    <li class="collection-item"><a href="/teacher/course/{{ course.course_name }}/{{ class.date }}">{{ class.date }}</a></li>
+                    <li class="collection-item"><a href="/teacher/course/{{ course.course_name }}/{{ class.id }}">{{ class.date }}</a></li>
                 {% endfor %}
               </ul>
             </div>

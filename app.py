@@ -154,7 +154,7 @@ def get_course(course_name):
         return abort(403)
 
 
-@app.route('/teacher/course/<course_name>/<class_date>', methods=['GET', 'POST'])
+@app.route('/teacher/course/<course_name>/<class_id>', methods=['GET', 'POST'])
 def get_class(course_name, class_date):
     username = session.get('username')
     teacher = Teacher.query.filter_by(username=username).first()
@@ -265,7 +265,7 @@ class MakeQRCode(Resource):
             }, 500
 
 
-api.add_resource(Login, '/login')
+api.add_resource(Login, '/student-login')
 api.add_resource(SendQRCode, '/mark')
 api.add_resource(MakeQRCode, '/getqr')
 
