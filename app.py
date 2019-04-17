@@ -267,7 +267,7 @@ class MakeQRCode(Resource):
             data = timed_serializer.dumps(data)
             return {
                     'success': "true",
-                    'image_url': f'https://api.qrserver.com/v1/create-qr-code/?data={data}&size=600x600'
+                    'image_url': f'https://api.qrserver.com/v1/create-qr-code/?data={data}&size=300x300'
             }, 200
         except:
             return {
